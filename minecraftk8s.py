@@ -3,8 +3,10 @@ import sys
 import argparse
 import json
 import urllib3
-def setNewWorkload(workloadName,projectID):
-    url = "https://192.168.55.107/v3/project/"+projectID+"/workloads"
+
+## This function is used to fetch a workload by his name, return 404 if any ressource was found
+def setNewWorkload(workloadName,projectID,endpoint):
+    url = "https://"+endpoint+"/v3/project/"+projectID+"/workloads"
     # Read new Workload JSON config file
     with open('workloadConfig.json', 'r') as f:
         rawJSON = json.load(f)
@@ -29,9 +31,8 @@ def setNewWorkload(workloadName,projectID):
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
     #if (response == ) :
     #print(response.text)
-
-def getWorkload(workloadName,projectID):
-    url = "https://192.168.55.107/v3/project/"+projectID+"/workloads/statefulset:default:"+workloadName 
+def getWorkload(workloadName,projectID,endpoint):
+    url = 'https://'+endpoint+'/v3/project/'+projectID+'/workloads/statefulset:default:'+workloadName 
     payload = ""
     headers = {
     'Content-Type': "application/json",
@@ -44,5 +45,3 @@ def getWorkload(workloadName,projectID):
    #print(response)
     return response.text
     print(response)
-
-getWorkload('toto','c-l5kcc:p-llwjz')
