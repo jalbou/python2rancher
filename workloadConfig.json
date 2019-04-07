@@ -9,11 +9,11 @@
     "image": "itzg/minecraft-server",
     "imagePullPolicy": "Always",
     "initContainer": false,
-    "name": "{{newWorkloadName}}",
+    "name": "newWorkloadname",
     "ports": [
     {
     "containerPort": 8081,
-    "dnsName": "{{newWorkloadName}}-nodeport",
+    "dnsName": "newWorkloadname-nodeport",
     "kind": "NodePort",
     "name": "8081tcp01",
     "protocol": "TCP",
@@ -43,18 +43,18 @@
     "hostNetwork": false,
     "hostPID": false,
     "labels": {
-    "workload.user.cattle.io/workloadselector": "statefulSet-default-{{newWorkloadName}}"
+    "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
     },
-    "name": "{{newWorkloadName}}",
+    "name": "newWorkloadname",
     "namespaceId": "default",
     "ownerReferences": [ ],
-    "projectId": "{{projectID}}",
+    "projectId": "projectID",
     "restartPolicy": "Always",
     "scale": 1,
     "schedulerName": "default-scheduler",
     "selector": {
     "matchLabels": {
-    "workload.user.cattle.io/workloadselector": "statefulSet-default-{{newWorkloadName}}"
+    "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
     },
     "type": "/v3/project/schemas/labelSelector"
     },
@@ -62,7 +62,7 @@
     "statefulSetConfig": {
     "podManagementPolicy": "OrderedReady",
     "revisionHistoryLimit": 10,
-    "serviceName": "{{newWorkloadName}}",
+    "serviceName": "newWorkloadname",
     "strategy": "RollingUpdate"
     },
     "statefulSetStatus": {
@@ -82,6 +82,6 @@
     "field.cattle.io/creatorId": "user-k6jnq"
     },
     "workloadLabels": {
-    "workload.user.cattle.io/workloadselector": "statefulSet-default-{{newWorkloadName}}"
+    "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
     }
     }
