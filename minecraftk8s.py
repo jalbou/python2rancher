@@ -21,7 +21,7 @@ def setNewWorkload(workloadName,projectID,endpoint):
     rawJSON['statefulSetConfig']['serviceName'] = workloadName
     rawJSON['projectId'] = projectID
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
-    #Set HTTP Header
+    #Set HTTP Header - Need to be encrypted
     headers = {
         'Content-Type': "application/json",
         'Authorization': "Basic dG9rZW4tbHFyZHg6NXE2emxmd21iNHF4YjZydm5nOThoazg3N2ZxZGJrNm01Nmt2ZjdwZGRnNGxtbWtjNGpnOHF3",
@@ -36,6 +36,7 @@ def setNewWorkload(workloadName,projectID,endpoint):
 def getWorkload(workloadName,projectID,endpoint):
     url = 'https://'+endpoint+'/v3/project/'+projectID+'/workloads/statefulset:default:'+workloadName 
     payload = ""
+    ## Need to be encrypted
     headers = {
     'Content-Type': "application/json",
     'Authorization': "Basic dG9rZW4tbHFyZHg6NXE2emxmd21iNHF4YjZydm5nOThoazg3N2ZxZGJrNm01Nmt2ZjdwZGRnNGxtbWtjNGpnOHF3",
