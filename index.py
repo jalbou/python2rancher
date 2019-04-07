@@ -22,23 +22,23 @@ parser.add_argument("-e", "--endpoint", type=str,
                     help="API Endpoint URL")                  
 args = parser.parse_args()
 
-workloadName = args.workloadName
 projectID = args.projectID
 endpoint = args.endpoint
 count = args.count
 i=0
 while i < count:
     i += 1
-    isWorkload = minecraftk8s.getWorkload(workloadName+str(i),projectID,endpoint)
+    workloadName = args.workloadName+str(i)
+    isWorkload = minecraftk8s.getWorkload(workloadName,projectID,endpoint)
     jsonfile = json.loads(isWorkload)
     basetype= jsonfile["baseType"]
     if basetype == "error":
         print("Status found:"+basetype)
-        print("No workload existing for "+workloadName+str(i))
-        minecraftk8s.setNewWorkload(workloadName+str(i),projectID,endpoint)
+        print("No workload existing for "+workloadName)
+        minecraftk8s.setNewWorkload(workloadName,projectID,endpoint)
     else:
         print("Status found :"+basetype)
-        print("Workload existing for "+workloadName+str(i))
+        print("Workload existing for "+workloadName)
 
 
 

@@ -4,7 +4,7 @@ import argparse
 import json
 import urllib3
 
-## This function is used to fetch a workload by his name, return 404 if any ressource was found
+## This function is used to create a new Minecraft workload on a specific k8s cluster and assign it a new dynamic storage class
 def setNewWorkload(workloadName,projectID,endpoint):
     url = "https://"+endpoint+"/v3/project/"+projectID+"/workloads"
     # Read new Workload JSON config file
@@ -31,6 +31,8 @@ def setNewWorkload(workloadName,projectID,endpoint):
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
     #if (response == ) :
     #print(response.text)
+
+## This function is used to fetch a workload by his name, return 404 if any ressource was found
 def getWorkload(workloadName,projectID,endpoint):
     url = 'https://'+endpoint+'/v3/project/'+projectID+'/workloads/statefulset:default:'+workloadName 
     payload = ""
