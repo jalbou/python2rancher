@@ -9,15 +9,15 @@ def setNewWorkload(workloadName,projectID):
     with open('workloadConfig.json', 'r') as f:
         rawJSON = json.load(f)
     #Set JSON config file according workload arguments
-    payload['containers'][0]['name'] = workloadName
-    payload['containers'][0]['ports'][0]['dnsName'] = workloadName+'-nodeport'
-    payload['selector']['matchLabels']['workload.user.cattle.io/workloadselector'] = "statefulSet-default-"+workloadName
-    payload['name']= workloadName
-    payload['workloadLabels']['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
-    payload['labels']['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
-    payload['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
-    payload['statefulSetConfig']['serviceName'] = workloadName
-    payload['projectId'] = projectID
+    rawJSON['containers'][0]['name'] = workloadName
+    rawJSON['containers'][0]['ports'][0]['dnsName'] = workloadName+'-nodeport'
+    rawJSON['selector']['matchLabels']['workload.user.cattle.io/workloadselector'] = "statefulSet-default-"+workloadName
+    rawJSON['name']= workloadName
+    rawJSON['workloadLabels']['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
+    rawJSON['labels']['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
+    rawJSON['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
+    rawJSON['statefulSetConfig']['serviceName'] = workloadName
+    rawJSON['projectId'] = projectID
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     #Set HTTP Header
     headers = {
@@ -27,8 +27,8 @@ def setNewWorkload(workloadName,projectID):
         'Postman-Token': "3925edcb-d2cb-4477-8303-5094ba36886b"
     }
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
-    if (response)
-    print(response.text)
+    #if (response == ) :
+    #print(response.text)
 
 def getWorkload(workloadName,projectID):
     url = "https://192.168.55.107/v3/project/"+projectID+"/workloads/statefulset:default:"+workloadName 
@@ -40,6 +40,9 @@ def getWorkload(workloadName,projectID):
     'Postman-Token': "3925edcb-d2cb-4477-8303-5094ba36886b"
     }
     response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
-   # print(url)
-   # print(response)
+   #print(url)
+   #print(response)
     return response.text
+    print(response)
+
+getWorkload('toto','c-l5kcc:p-llwjz')
