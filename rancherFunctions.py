@@ -1,14 +1,13 @@
 import requests
 import sys
-import argparse
 import json
 import urllib3
 
 ## This function is used to create a new Minecraft workload on a specific k8s cluster and assign it a new dynamic storage class
-def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers):
-    url = "https://"+rancherEndpoint+"/v3/project/"+projectID+"/workloads"
+def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate):
+    url = "https://"+rancherEndpoint+"/v3/project/"+rancherProjectID+"/workloads"
     # Read new Workload JSON config file
-    with open('MinecraftworkloadConfig.json', 'r') as f:
+    with open(workloadTemplate+'.json', 'r') as f:
         rawJSON = json.load(f)
     #Set JSON config file according workload arguments
     rawJSON['containers'][0]['name'] = workloadName
@@ -24,18 +23,30 @@ def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,ran
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
 #Error Handling here
 
-## This function is used to fetch a workload by his name, return 404 if any ressource was found
+## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
 def getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):
     url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/statefulset:default:'+workloadName
     payload = ""
     response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
-    return response
-    print(response.text)
+    return response.status_code
 
+## This function is used to fetch a storage class by his name, return 404 if any ressource was found and 202 if something exist
 def getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers):
     url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/storageclass'+workloadName
     payload = ""
     response = requests.get(url, data=payload, headers=headers ,verify=False)
-    return response
-    print(response.text)
+    return response.status_code
 
+## This function is used to fetch all workloads for a given workload name return an JSON object containing basic workload infos
+def getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):
+    url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/'
+    payload = ""
+    response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
+    content = response.content
+    workloadList = json.loads(content)
+    result=[]
+    for container in workloadList['data']:
+        for name in container['containers']:
+            result.append(name['name'])
+    print(result)
+    return result

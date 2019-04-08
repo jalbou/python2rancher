@@ -1,4 +1,4 @@
-### Minecraft to rancher/k8s workload & storage class management functions by Jeremy Albou ### 
+### Rancher Create workload from json workload template ###
 #Module to manage https requests
 import requests
 import sys
@@ -8,13 +8,13 @@ import json
 #Module to manage HTTPS python config
 import urllib3
 #Custom librarie to manage Minecraft workloads on a given k8s cluster managed by Rancher
-import minecraftk8s as minecraftk8s
+import rancherFunctions as rancher
 import os
 urllib3.disable_warnings()
 ### Creating argument helper and positioner ### 
 parser = argparse.ArgumentParser()
 parser.add_argument("-w","--workloadName", type=str,
-                    help="Name of the Workload")
+                    help="Name of the Workload template")
 parser.add_argument("-c", "--count", type=int,
                     help="Number of desired deployments")
 parser.add_argument("-p", "--projectID", type=str,
@@ -26,6 +26,7 @@ rancherToken = os.environ.get('RancherToken')
 rancherEndpoint= os.environ.get('RancherEndpoint')
 rancherClusterID = os.environ.get('RancherClusterID')
 rancherProjectID = os.environ.get('RancherProjectID')
+workloadTemplate = args.workloadName
 count = args.count
 #Set HTTP Header for Rancher API Calls
 headers = {
@@ -38,14 +39,15 @@ i=0
 while i < count:
     i += 1
     workloadName = args.workloadName+str(i)
-    isWorkload = minecraftk8s.getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
-    isStorageClass = minecraftk8s.getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
-    if  isWorkload.status_code == "404" or isStorageClass.status_code =="404":
-        if  isStorageClass.status_code == "404":
+    isWorkload = rancher.getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+    isStorageClass = rancher.getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
+    if  isWorkload == 404 or isStorageClass==404:
+        if  isStorageClass == 404:
              print('Storage Class storageclass'+workloadName+' not found , creating ... ')
-             minecraftk8s.getStorageClass(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
-        if  isWorkload.status_code == "404":
+             #minecraftk8s.getStorageClass(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
+        if  isWorkload == 404:
              print('Workload '+workloadName+' not found , creating ... ')
-             minecraftk8s.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
+             rancher.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
     else:
         print("Workload already existing. Escaping...")
+allworkloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
