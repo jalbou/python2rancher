@@ -37,6 +37,19 @@ def getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,ra
     response = requests.get(url, data=payload, headers=headers ,verify=False)
     return response.status_code
 
+## This function is used to fetch all storage classes for a given cluster name return an JSON object containing basic storage infos
+def getAllStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers):
+    url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses'
+    payload = ""
+    response = requests.get(url, data=payload, headers=headers ,verify=False)
+    content = response.content
+    workloadList = json.loads(content)
+    result=[]
+    for storageClass in workloadList['data']:
+        result.append(storageClass['id'])
+    print(result)
+    return result
+
 ## This function is used to fetch all workloads for a given workload name return an JSON object containing basic workload infos
 def getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):
     url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/'
@@ -48,5 +61,4 @@ def getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken
     for container in workloadList['data']:
         for name in container['containers']:
             result.append(name['name'])
-    print(result)
     return result

@@ -37,6 +37,7 @@
     "type": "/v3/project/schemas/container"
     }
     ],
+    "created": "2019-03-18T19:10:36Z",
     "dnsPolicy": "ClusterFirst",
     "hostIPC": false,
     "hostNetwork": false,
@@ -77,6 +78,9 @@
     "transitioning": "no",
     "transitioningMessage": "",
     "volumes": [ ],
+    "workloadAnnotations": {
+    "field.cattle.io/creatorId": "user-k6jnq"
+    },
     "workloadLabels": {
     "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
     }

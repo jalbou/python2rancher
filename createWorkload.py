@@ -50,4 +50,6 @@ while i < count:
              rancher.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
     else:
         print("Workload already existing. Escaping...")
-allworkloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+
+#allworkloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+#allStorageClass = rancher.getAllStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
