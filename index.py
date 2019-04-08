@@ -18,31 +18,34 @@ parser.add_argument("-w","--workloadName", type=str,
 parser.add_argument("-c", "--count", type=int,
                     help="Number of desired deployments")
 parser.add_argument("-p", "--projectID", type=str,
-                    help="Project ID Number")
-parser.add_argument("-e", "--endpoint", type=str,
-                    help="API Endpoint URL")                  
+                    help="Project ID Number")     
 args = parser.parse_args()
-
-projectID = args.projectID
-endpoint = args.endpoint
 #Get Rancher API cred from system variable enviroments
 rancherAuth = os.environ.get('RancherAuth')
 rancherToken = os.environ.get('RancherToken')
+rancherEndpoint= os.environ.get('RancherEndpoint')
+rancherClusterID = os.environ.get('RancherClusterID')
+rancherProjectID = os.environ.get('RancherProjectID')
 count = args.count
 i=0
 while i < count:
     i += 1
     workloadName = args.workloadName+str(i)
-    isWorkload = minecraftk8s.getWorkload(workloadName,projectID,endpoint,rancherAuth,rancherToken)
-    jsonfile = json.loads(isWorkload)
-    basetype= jsonfile["baseType"]
-    if basetype == "error":
-        print("Status found:"+basetype)
+    isWorkload = minecraftk8s.getWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
+    isStorageClass = minecraftk8s.getStorageClass(workloadName,rancherEndpoint,rancherAuth,rancherToken,rancherClusterID)
+    isWorkLoadJSON = json.loads(isWorkload)
+    isWorkLoadJSONBaseType= isWorkLoadJSON["baseType"]
+    isStorageClassJSON=json.loads(isStorageCLass)
+    isStorageClassJSONBaseType=  isStorageClassJSON["baseType"]
+"""     if isWorkLoadJSONBaseType == "error":
+        print("Status found:"+isWorkLoadJSONBaseType)
         print("No workload existing for "+workloadName)
-        minecraftk8s.setNewWorkload(workloadName,projectID,endpoint,rancherAuth,rancherToken)
+        minecraftk8s.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
     else:
-        print("Status found :"+basetype)
-        print("Workload existing for "+workloadName)
+        print("Status found :"+isWorkLoadJSONBaseType)
+        print("Workload existing for "+workloadName) """
+        
+print(isStorageClass)
 
 
 
