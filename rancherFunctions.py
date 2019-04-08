@@ -27,20 +27,17 @@ def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,ran
 #Error Handling here
 
 ## This function is used to create a new workload on a specific k8s cluster and assign it a new dynamic storage class for a given workload template
-def setNewStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers,workloadTemplate):
+def setNewStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers,workloadTemplate,workloadName):
     url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/'
     # Read new Workload JSON config file
-    storageClassTemplatePath = 'Templates/'+workloadTemplate+'storageclass.json'
+    storageClassTemplatePath = 'Templates/'+workloadTemplate+'-storageclass.json'
     print(storageClassTemplatePath)
     with open(storageClassTemplatePath, 'r') as f:
         rawJSON = json.load(f)
     #Set JSON config file according workload arguments
-    rawJSON['containers'][0]['name'] = workloadName
-    rawJSON['containers'][0]['ports'][0]['dnsName'] = workloadName+'-nodeport'
+    rawJSON['name'] = 'storageclass'+workloadName
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.post(url, data=payload, headers=headers,verify=False)
-
-
 
 ## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
 def getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):

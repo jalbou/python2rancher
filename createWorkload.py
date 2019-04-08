@@ -44,7 +44,7 @@ while i < count:
     if  isWorkload == 404 or isStorageClass==404:
         if  isStorageClass == 404:
              print('Storage Class storageclass'+workloadName+' not found , creating ... ')
-             #minecraftk8s.getStorageClass(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
+             rancher.setNewStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers,workloadTemplate,workloadName)
         if  isWorkload == 404:
              print('Workload '+workloadName+' not found , creating ... ')
              rancher.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
