@@ -40,14 +40,12 @@ while i < count:
     workloadName = args.workloadName+str(i)
     isWorkload = minecraftk8s.getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
     isStorageClass = minecraftk8s.getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
-    isWorkLoadJSON = json.loads(isWorkload)
-    isWorkLoadJSONBaseType= isWorkLoadJSON["baseType"]
-    isStorageClassJSON=json.loads(isStorageCLass)
-    isStorageClassJSONBaseType=  isStorageClassJSON["baseType"]
-    if isWorkLoadJSONBaseType == "error":
-        print("Status found:"+isWorkLoadJSONBaseType)
-        print("No workload existing for "+workloadName)
-        minecraftk8s.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
+    if  isWorkload.status_code == "404" or isStorageClass.status_code =="404":
+        if  isStorageClass.status_code == "404":
+             print('Storage Class storageclass'+workloadName+' not found , creating ... ')
+             minecraftk8s.getStorageClass(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
+        if  isWorkload.status_code == "404":
+             print('Workload '+workloadName+' not found , creating ... ')
+             minecraftk8s.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
     else:
-        print("Status found :"+isWorkLoadJSONBaseType)
-        print("Workload existing for "+workloadName)
+        print("Workload already existing. Escaping...")

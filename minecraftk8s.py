@@ -29,14 +29,13 @@ def getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,ranche
     url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/statefulset:default:'+workloadName
     payload = ""
     response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
-    return response.text
-    print(response)
+    return response
+    print(response.text)
 
 def getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers):
     url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/storageclass'+workloadName
-    print(url)
     payload = ""
-    response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
-    print(response)
-    return response.text
+    response = requests.get(url, data=payload, headers=headers ,verify=False)
+    return response
+    print(response.text)
 
