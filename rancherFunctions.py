@@ -2,12 +2,15 @@ import requests
 import sys
 import json
 import urllib3
+import pathlib
 
-## This function is used to create a new Minecraft workload on a specific k8s cluster and assign it a new dynamic storage class
+## This function is used to create a new workload on a specific k8s cluster and assign it a new dynamic storage class for a given workload template
 def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate):
     url = "https://"+rancherEndpoint+"/v3/project/"+rancherProjectID+"/workloads"
     # Read new Workload JSON config file
-    with open(workloadTemplate+'.json', 'r') as f:
+    workloadTemplatePath = 'Templates/'+workloadTemplate+'.json'
+    print(workloadTemplatePath)
+    with open(workloadTemplatePath, 'r') as f:
         rawJSON = json.load(f)
     #Set JSON config file according workload arguments
     rawJSON['containers'][0]['name'] = workloadName
@@ -22,6 +25,22 @@ def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,ran
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
 #Error Handling here
+
+## This function is used to create a new workload on a specific k8s cluster and assign it a new dynamic storage class for a given workload template
+def setNewStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers,workloadTemplate):
+    url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/'
+    # Read new Workload JSON config file
+    storageClassTemplatePath = 'Templates/'+workloadTemplate+'storageclass.json'
+    print(storageClassTemplatePath)
+    with open(storageClassTemplatePath, 'r') as f:
+        rawJSON = json.load(f)
+    #Set JSON config file according workload arguments
+    rawJSON['containers'][0]['name'] = workloadName
+    rawJSON['containers'][0]['ports'][0]['dnsName'] = workloadName+'-nodeport'
+    payload=json.dumps(rawJSON, indent=4, sort_keys=True)
+    response = requests.post(url, data=payload, headers=headers,verify=False)
+
+
 
 ## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
 def getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):
