@@ -5,7 +5,7 @@ import json
 import urllib3
 
 ## This function is used to create a new Minecraft workload on a specific k8s cluster and assign it a new dynamic storage class
-def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken):
+def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers):
     url = "https://"+rancherEndpoint+"/v3/project/"+projectID+"/workloads"
     # Read new Workload JSON config file
     with open('MinecraftworkloadConfig.json', 'r') as f:
@@ -21,42 +21,22 @@ def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,ran
     rawJSON['statefulSetConfig']['serviceName'] = workloadName
     rawJSON['projectId'] = rancherProjectID
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
-    #Set HTTP Header
-    headers = {
-        'Content-Type': "application/json",
-        'Authorization': rancherAuth,
-        'cache-control': "no-cache",
-        'Postman-Token': rancherToken
-    }
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
-    #if (response == ) :
-    #print(response.text)
+#Error Handling here
 
 ## This function is used to fetch a workload by his name, return 404 if any ressource was found
-def getWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken):
-    url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/statefulset:default:'+workloadName 
+def getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):
+    url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/statefulset:default:'+workloadName
     payload = ""
-    #Set HTTP Header
-    headers = {
-    'Content-Type': "application/json",
-    'Authorization': rancherAuth,
-    'cache-control': "no-cache",
-    'Postman-Token': rancherToken
-    }
     response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
     return response.text
     print(response)
 
-def getStorageClass(workloadName,rancherClusterID,rancherEndpoint,rancherAuth,rancherToken):
-    url = "https://"+rancherEndpoint+"/c/"+rancherClusterID+"/storage/classes/storageclass"+workloadName
+def getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers):
+    url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/storageclass'+workloadName
+    print(url)
     payload = ""
-    #Set HTTP Header
-    headers = {
-    'Content-Type': "application/json",
-    'Authorization': rancherAuth,
-    'cache-control': "no-cache",
-    'Postman-Token': rancherToken
-    }
     response = requests.request("GET", url, data=payload, headers=headers ,verify=False)
-    return response.text
     print(response)
+    return response.text
+

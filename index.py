@@ -27,26 +27,27 @@ rancherEndpoint= os.environ.get('RancherEndpoint')
 rancherClusterID = os.environ.get('RancherClusterID')
 rancherProjectID = os.environ.get('RancherProjectID')
 count = args.count
+#Set HTTP Header for Rancher API Calls
+headers = {
+    'Content-Type': "application/json",
+    'Authorization': rancherAuth,
+    'cache-control': "no-cache",
+    'Postman-Token': rancherToken
+}
 i=0
 while i < count:
     i += 1
     workloadName = args.workloadName+str(i)
-    isWorkload = minecraftk8s.getWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
-    isStorageClass = minecraftk8s.getStorageClass(workloadName,rancherEndpoint,rancherAuth,rancherToken,rancherClusterID)
+    isWorkload = minecraftk8s.getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+    isStorageClass = minecraftk8s.getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
     isWorkLoadJSON = json.loads(isWorkload)
     isWorkLoadJSONBaseType= isWorkLoadJSON["baseType"]
     isStorageClassJSON=json.loads(isStorageCLass)
     isStorageClassJSONBaseType=  isStorageClassJSON["baseType"]
-"""     if isWorkLoadJSONBaseType == "error":
+    if isWorkLoadJSONBaseType == "error":
         print("Status found:"+isWorkLoadJSONBaseType)
         print("No workload existing for "+workloadName)
         minecraftk8s.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken)
     else:
         print("Status found :"+isWorkLoadJSONBaseType)
-        print("Workload existing for "+workloadName) """
-        
-print(isStorageClass)
-
-
-
-
+        print("Workload existing for "+workloadName)
