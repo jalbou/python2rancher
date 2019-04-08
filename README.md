@@ -1,2 +1,2 @@
 # python2rancher
-Python scripts
+Python script to manage Rancher & K8S Workloads
