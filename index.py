@@ -9,6 +9,7 @@ import json
 import urllib3
 #Custom librarie to manage Minecraft workloads on a given k8s cluster managed by Rancher
 import minecraftk8s as minecraftk8s
+import os
 urllib3.disable_warnings()
 ### Creating argument helper and positioner ### 
 parser = argparse.ArgumentParser()
@@ -24,18 +25,21 @@ args = parser.parse_args()
 
 projectID = args.projectID
 endpoint = args.endpoint
+#Get Rancher API cred from system variable enviroments
+rancherAuth = os.environ.get('RancherAuth')
+rancherToken = os.environ.get('RancherToken')
 count = args.count
 i=0
 while i < count:
     i += 1
     workloadName = args.workloadName+str(i)
-    isWorkload = minecraftk8s.getWorkload(workloadName,projectID,endpoint)
+    isWorkload = minecraftk8s.getWorkload(workloadName,projectID,endpoint,rancherAuth,rancherToken)
     jsonfile = json.loads(isWorkload)
     basetype= jsonfile["baseType"]
     if basetype == "error":
         print("Status found:"+basetype)
         print("No workload existing for "+workloadName)
-        minecraftk8s.setNewWorkload(workloadName,projectID,endpoint)
+        minecraftk8s.setNewWorkload(workloadName,projectID,endpoint,rancherAuth,rancherToken)
     else:
         print("Status found :"+basetype)
         print("Workload existing for "+workloadName)
