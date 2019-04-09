@@ -76,3 +76,17 @@ def getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken
         for name in container['containers']:
             result.append(name['name'])
     return result
+
+## This function is used to delete a workload by his name, return 404 if any ressource was found and 204 was deleted
+def RemoveWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers):
+    isWorkload = getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+    if isWorkload == 404:
+        print("workload "+workloadName+" doest not exist")
+        status_code = "Not found"
+        return 
+    else:
+        url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/workloads/statefulset:default:'+workloadName
+        response = requests.delete(url,headers=headers ,verify=False)
+        status_code = response.status_code
+        print(status_code)
+        return status_code
