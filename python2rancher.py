@@ -90,3 +90,17 @@ def RemoveWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,ran
         status_code = response.status_code
         print(status_code)
         return status_code
+    
+## This function is used to delete a workload by his name, return 404 if any ressource was found and 204 was deleted
+def RemoveStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers):
+    isStorageClass = getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
+    if isStorageClass == 404:
+        print("StorageClass "+workloadName+" doest not exist")
+        status_code = "Not found"
+        return 
+    else:
+        url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/storageclass'+workloadName
+        response = requests.delete(url,headers=headers ,verify=False)
+        status_code = response.status_code
+        print(status_code)
+        return status_code

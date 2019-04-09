@@ -8,7 +8,7 @@ import json
 #Module to manage HTTPS python config
 import urllib3
 #Custom librarie to manage Minecraft workloads on a given k8s cluster managed by Rancher
-import rancherFunctions as rancher
+import python2rancher as rancher
 import os
 urllib3.disable_warnings()
 ### Creating argument helper and positioner ### 
@@ -56,6 +56,7 @@ if str(args.destroy) == "None":
             print("Workload "+workloadName+" already existing. Escaping...")
 else :
     workloadName = args.workloadName
+    rancher.RemoveStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
     rancher.RemoveWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
 #allworkloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
 #allStorageClass = rancher.getAllStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
