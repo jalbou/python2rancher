@@ -49,7 +49,7 @@ while i < count:
              print('Workload '+workloadName+' not found , creating ... ')
              rancher.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
     else:
-        print("Workload already existing. Escaping...")
+        print("Workload "+workloadName+" already existing. Escaping...")
 
 #allworkloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
 #allStorageClass = rancher.getAllStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)

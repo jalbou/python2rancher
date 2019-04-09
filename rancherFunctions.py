@@ -31,7 +31,6 @@ def setNewStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken
     url = 'https://'+rancherEndpoint+'/v3/cluster/'+rancherClusterID+'/storageClasses/'
     # Read new Workload JSON config file
     storageClassTemplatePath = 'Templates/'+workloadTemplate+'-storageclass.json'
-    print(storageClassTemplatePath)
     with open(storageClassTemplatePath, 'r') as f:
         rawJSON = json.load(f)
     #Set JSON config file according workload arguments
@@ -63,7 +62,6 @@ def getAllStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken
     result=[]
     for storageClass in workloadList['data']:
         result.append(storageClass['id'])
-    print(result)
     return result
 
 ## This function is used to fetch all workloads for a given workload name return an JSON object containing basic workload infos
