@@ -10,6 +10,7 @@ import urllib3
 #Custom librarie to manage Minecraft workloads on a given k8s cluster managed by Rancher
 import python2rancher as rancher
 import os
+import re
 urllib3.disable_warnings()
 ### Creating argument helper and positioner ### 
 parser = argparse.ArgumentParser()
@@ -40,13 +41,23 @@ headers = {
 
 if str(args.destroy) == "None":
     i=0
+    #Get A list of actual workload matching the template workload requested using a regex filter
+    workloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+    regex = re.compile(workloadTemplate)
+    filteredList = list(filter(regex.match, workloads))
+    filteredList.sort(reverse=True)
+    if not filteredList:
+        firstOccurence = 0
+    else:
+        firstOccurence =int(re.findall(r'\d', str(filteredList[0]))[0])
+        print(firstOccurence)
     while i < count:
         i += 1
-        workloadName = args.workloadName+str(i)
+        workloadName = args.workloadName+str(firstOccurence+i)
         isWorkload = rancher.getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
         isStorageClass = rancher.getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
         if  isWorkload == 404 or isStorageClass==404:
-            rancher.setNewPVC('storageclass1',rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
+            rancher.setNewPVC('storageclass1',rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate,workloadName)
             #rancher.setNewStorageClaim(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
             if  isStorageClass == 404:
                 print('Storage Class storageclass'+workloadName+' not found , creating ... ')

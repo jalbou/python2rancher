@@ -20,6 +20,8 @@ def setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,ran
     rawJSON['labels']['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
     rawJSON['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
     rawJSON['statefulSetConfig']['serviceName'] = workloadName
+    rawJSON['volumes'][0]['name'] = 'volume'+workloadName
+    rawJSON['volumes'][0]['persistentVolumeClaim']['persistentVolumeClaimId'] = 'default:volume'+workloadName
     rawJSON['projectId'] = rancherProjectID
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
@@ -32,19 +34,23 @@ def setNewStorageClaim(workloadName,rancherProjectID,rancherEndpoint,rancherAuth
     workloadTemplatePath = 'Templates/'+workloadTemplate+'-storageVolume.json'
     with open(workloadTemplatePath, 'r') as f:
         rawJSON = json.load(f)
+    rawJSON['name'] = workloadName
+    rawJSON['projectId'] = rancherProjectID
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
     print(response.content)
 #Error Handling here
 
 ## This function is used to create a new Persitant Volume claim on a given storage class
-def setNewPVC(storageClassName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate):
+def setNewPVC(storageClassName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate,workloadName):
     url = 'https://'+rancherEndpoint+'/v3/project/'+rancherProjectID+'/persistentvolumeclaims' 
     # Read new Workload JSON config file
-    print(url)
     workloadTemplatePath = 'Templates/'+workloadTemplate+'-PVC.json'
     with open(workloadTemplatePath, 'r') as f:
         rawJSON = json.load(f)
+    rawJSON['name'] = 'volume'+workloadName
+    rawJSON['projectId'] = rancherProjectID
+    rawJSON['storageClassId'] = 'storageclass1'
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST", url, data=payload, headers=headers,verify=False)
     print(response.content)

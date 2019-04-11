@@ -11,6 +11,5 @@
             "type": "/v3/project/schemas/resourceRequirements"
             },
         "selector": null,
-        "storageClassId": "storageclass1",
-        "volumeId": ""
+        "storageClassId": "storageclass1"
         }

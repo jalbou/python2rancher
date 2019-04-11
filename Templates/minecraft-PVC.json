@@ -1,33 +1,15 @@
 {
-    "accessModes": [
-    "ReadWriteOnce"
-    ],
-    "annotations": {
-    "kubernetes.io/createdby": "vsphere-volume-dynamic-provisioner",
-    "pv.kubernetes.io/bound-by-controller": "yes",
-    "pv.kubernetes.io/provisioned-by": "kubernetes.io/vsphere-volume"
-    },
-    "capacity": {
-    "storage": "20Gi"
-    },
-    "claimRef": {
-    "apiVersion": "v1",
-    "kind": "PersistentVolumeClaim",
-    "name": "volminecraft1",
-    "namespace": "default",
-    "resourceVersion": "53924",
-    "type": "/v3/cluster/schemas/objectReference"
-    },
-    "mountOptions": [ ],
-    "name": "pvc-minecraft1",
-    "persistentVolumeReclaimPolicy": "Delete",
-    "storageClassId": "storageclass1",
-    "transitioning": "no",
-    "transitioningMessage": "",
-    "volumeMode": "Filesystem",
-    "vsphereVolume": {
-    "fsType": "ext4",
-    "type": "/v3/cluster/schemas/vsphereVirtualDiskVolumeSource",
-    "volumePath": "[DS2-LAB] kubevols/kubernetes-dynamic-minecraft1.vmdk"
-    }
+    "accessModes": ["ReadWriteOnce"],
+    "dataSource": null,
+    "name": "super",
+    "namespaceId": "default",
+    "projectId": "c-vqxg5:p-42tq9",
+    "resources": {
+        "requests": {
+        "storage": "10Gi"
+        },
+        "type": "/v3/project/schemas/resourceRequirements"
+        },
+    "selector": null,
+    "storageClassId": "storageclass1"
     }

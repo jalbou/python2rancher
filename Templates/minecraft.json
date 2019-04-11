@@ -81,9 +81,9 @@
     },
     "volumes": [
         {
-        "name": "volminecraft1",
+        "name": "vol1",
         "persistentVolumeClaim": {
-        "persistentVolumeClaimId": "default:volminecraft1",
+        "persistentVolumeClaimId": "default:super",
         "readOnly": false,
         "type": "/v3/project/schemas/persistentVolumeClaimVolumeSource"
         },
