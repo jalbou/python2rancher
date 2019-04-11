@@ -6,7 +6,7 @@
     "EULA": "TRUE",
     "SERVER_PORT": "8081"
     },
-    "image": "itzg/minecraft-server",
+    "image": "nginx",
     "imagePullPolicy": "Always",
     "initContainer": false,
     "name": "newWorkloadname",
@@ -76,18 +76,18 @@
     "terminationGracePeriodSeconds": 30,
     "transitioning": "no",
     "transitioningMessage": "",
-    "workloadLabels": {
-    "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
-    },
     "volumes": [
         {
-        "name": "volminecraft1",
+        "name": "vol1",
         "persistentVolumeClaim": {
-        "persistentVolumeClaimId": "default:volminecraft1",
+        "persistentVolumeClaimId": "default:super",
         "readOnly": false,
         "type": "/v3/project/schemas/persistentVolumeClaimVolumeSource"
         },
         "type": "/v3/project/schemas/volume"
         }
-        ]
+        ],
+    "workloadLabels": {
+    "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
+    }
     }

@@ -76,18 +76,8 @@
     "terminationGracePeriodSeconds": 30,
     "transitioning": "no",
     "transitioningMessage": "",
+    "volumes": [ ],
     "workloadLabels": {
     "workload.user.cattle.io/workloadselector": "statefulSet-default-newWorkloadname"
-    },
-    "volumes": [
-        {
-        "name": "volminecraft1",
-        "persistentVolumeClaim": {
-        "persistentVolumeClaimId": "default:volminecraft1",
-        "readOnly": false,
-        "type": "/v3/project/schemas/persistentVolumeClaimVolumeSource"
-        },
-        "type": "/v3/project/schemas/volume"
-        }
-        ]
+    }
     }
