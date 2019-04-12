@@ -2,20 +2,16 @@
     "containers": [
     {
     "allowPrivilegeEscalation": false,
-    "environment": {
-    "EULA": "TRUE",
-    "SERVER_PORT": "8081"
-    },
     "image": "nginx",
     "imagePullPolicy": "Always",
     "initContainer": false,
     "name": "newWorkloadname",
     "ports": [
     {
-    "containerPort": 8081,
+    "containerPort": 80,
     "dnsName": "newWorkloadname-nodeport",
     "kind": "NodePort",
-    "name": "8081tcp01",
+    "name": "80tcp01",
     "protocol": "TCP",
     "sourcePort": 0,
     "type": "/v3/project/schemas/containerPort"

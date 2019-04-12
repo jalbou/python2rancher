@@ -24,26 +24,26 @@ parser.add_argument("-d", "--destroy", type=bool,
                     help="Project ID Number")      
 args = parser.parse_args()
 #Get Rancher API cred from system variable enviroments
-rancherAuth = os.environ.get('RancherAuth')
-rancherToken = os.environ.get('RancherToken')
-rancherEndpoint= os.environ.get('RancherEndpoint')
-rancherClusterID = os.environ.get('RancherClusterID')
-rancherProjectID = os.environ.get('RancherProjectID')
-workloadTemplate = args.workloadName
-count = args.count
-#Set HTTP Header for Rancher API Calls
 headers = {
     'Content-Type': "application/json",
-    'Authorization': rancherAuth,
+    'Authorization': os.environ.get('RancherAuth'),
     'cache-control': "no-cache",
-    'Postman-Token': rancherToken
+    'Postman-Token': os.environ.get('RancherToken')
 }
-
+RancherObj =  {
+    'rancherEndpoint':os.environ.get('RancherEndpoint'),
+    'rancherClusterID':os.environ.get('RancherClusterID'),
+    'rancherProjectID':os.environ.get('RancherProjectID'),
+    'workloadTemplate':args.workloadName,
+    'headers': headers
+}
+count = args.count
+#Set HTTP Header for Rancher API Calls
 if str(args.destroy) == "None":
     i=0
     #Get A list of actual workload matching the template workload requested using a regex filter
-    workloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
-    regex = re.compile(workloadTemplate)
+    workloads = rancher.getAllWorkloadName(RancherObj)
+    regex = re.compile(RancherObj['workloadTemplate'])
     filteredList = list(filter(regex.match, workloads))
     filteredList.sort(reverse=True)
     if not filteredList:
@@ -54,23 +54,24 @@ if str(args.destroy) == "None":
     while i < count:
         i += 1
         workloadName = args.workloadName+str(firstOccurence+i)
-        isWorkload = rancher.getWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
-        isStorageClass = rancher.getStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
-        if  isWorkload == 404 or isStorageClass==404:
-            rancher.setNewPVC('storageclass1',rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate,workloadName)
-            #rancher.setNewStorageClaim(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
+        isWorkload = rancher.getWorkload(RancherObj,workloadName)
+        isStorageClass = rancher.getStorageClass(RancherObj)
+        if isWorkload == 404 or isStorageClass==404:
             if  isStorageClass == 404:
                 print('Storage Class storageclass'+workloadName+' not found , creating ... ')
-                #rancher.setNewStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers,workloadTemplate,workloadName)
+                rancher.setNewStorageClass(RancherObj)
             if  isWorkload == 404:
                 print('Workload '+workloadName+' not found , creating ... ')
-                rancher.setNewWorkload(workloadName,rancherProjectID,rancherEndpoint,rancherAuth,rancherToken,headers,workloadTemplate)
+                rancher.setNewPVC(RancherObj,workloadName)
+                rancher.setNewWorkload(RancherObj,workloadName)
         else:
             print("Workload "+workloadName+" already existing. Escaping...")
 else :
+    
     workloadName = args.workloadName
-    rancher.removeStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
-    rancher.removeWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
+    rancher.setNewWorkload(RancherObj,workloadName)
+    # rancher.removeStorageClass(workloadName,rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
+    # rancher.removeWorkload(workloadName,rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
 
 #allworkloads = rancher.getAllWorkloadName(rancherEndpoint,rancherProjectID,rancherAuth,rancherToken,headers)
 #allStorageClass = rancher.getAllStorageClass(rancherEndpoint,rancherClusterID,rancherAuth,rancherToken,headers)
