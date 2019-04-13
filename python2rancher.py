@@ -116,8 +116,3 @@ def removeStorageClass(RancherObj):
         response = requests.request("DELETE",url,headers=RancherObj['headers'] ,verify=False)
         status_code = response.status_code
         return status_code
-    
-# def test(APITools):
-#     print(APITools['rancherAuth'])
-#     print(APITools['headers'])
-#     print(APITools['rancherEndpoint'])
