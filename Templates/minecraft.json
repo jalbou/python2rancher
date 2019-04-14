@@ -34,7 +34,15 @@
     "terminationMessagePath": "/dev/termination-log",
     "terminationMessagePolicy": "File",
     "tty": true,
-    "type": "/v3/project/schemas/container"
+    "type": "/v3/project/schemas/container",
+    "volumeMounts": [
+        {
+        "mountPath": "/toto",
+        "name": "volumeweb1",
+        "readOnly": false,
+        "type": "/v3/project/schemas/volumeMount"
+        }
+        ]    
     }
     ],
     "dnsPolicy": "ClusterFirst",

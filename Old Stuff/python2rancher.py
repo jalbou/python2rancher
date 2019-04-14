@@ -39,12 +39,12 @@ def setNewPVC(RancherObj,workloadName):
     rawJSON['storageClassId'] = 'storageclass'+RancherObj['workloadTemplate']
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST",url, data=payload, headers=RancherObj['headers'],verify=False)
+    print(response.content)
 #Error Handling here
 
 ## This function is used to create a storage class for a specific k8s cluster
 def setNewStorageClass(RancherObj):
-    url = 'https://'+RancherObj['rancherEndpoint']+'/v3/cluster/'+RancherObj['rancherClusterID']+'/storageClasses/'
-    print('url : '+url)
+    url = 'https://'+RancherObj['rancherEndpoint']+'/v3/cluster/'+RancherObj['rancherProjectID']+'/storageClasses/'
     # Read new Workload JSON config file
     storageClassTemplatePath = 'Templates/'+RancherObj['workloadTemplate']+'-storageclass.json'
     with open(storageClassTemplatePath, 'r') as f:
@@ -53,7 +53,6 @@ def setNewStorageClass(RancherObj):
     rawJSON['name'] = 'storageclass'+RancherObj['workloadTemplate']
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST",url, data=payload, headers=RancherObj['headers'],verify=False)
-    print(response.content)
 
 ## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
 def getWorkload(RancherObj,workloadName):

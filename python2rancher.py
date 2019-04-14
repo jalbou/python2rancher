@@ -14,6 +14,8 @@ def setNewWorkload(RancherObj,workloadName):
     #Set JSON config file according workload arguments
     rawJSON['containers'][0]['name'] = workloadName
     rawJSON['containers'][0]['ports'][0]['dnsName'] = workloadName+'-nodeport'
+    rawJSON['containers'][0]['volumeMounts'][0]['mountPath'] = "/extvol"
+    rawJSON['containers'][0]['volumeMounts'][0]['name'] = "volume"+workloadName
     rawJSON['selector']['matchLabels']['workload.user.cattle.io/workloadselector'] = "statefulSet-default-"+workloadName
     rawJSON['name']= workloadName
     rawJSON['workloadLabels']['workload.user.cattle.io/workloadselector'] = 'statefulSet-default-'+workloadName
@@ -39,12 +41,12 @@ def setNewPVC(RancherObj,workloadName):
     rawJSON['storageClassId'] = 'storageclass'+RancherObj['workloadTemplate']
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST",url, data=payload, headers=RancherObj['headers'],verify=False)
-    print(response.content)
 #Error Handling here
 
 ## This function is used to create a storage class for a specific k8s cluster
 def setNewStorageClass(RancherObj):
-    url = 'https://'+RancherObj['rancherEndpoint']+'/v3/cluster/'+RancherObj['rancherProjectID']+'/storageClasses/'
+    url = 'https://'+RancherObj['rancherEndpoint']+'/v3/cluster/'+RancherObj['rancherClusterID']+'/storageClasses/'
+    print('url : '+url)
     # Read new Workload JSON config file
     storageClassTemplatePath = 'Templates/'+RancherObj['workloadTemplate']+'-storageclass.json'
     with open(storageClassTemplatePath, 'r') as f:
@@ -53,6 +55,7 @@ def setNewStorageClass(RancherObj):
     rawJSON['name'] = 'storageclass'+RancherObj['workloadTemplate']
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST",url, data=payload, headers=RancherObj['headers'],verify=False)
+    print(response.content)
 
 ## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
 def getWorkload(RancherObj,workloadName):
