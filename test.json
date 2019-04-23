@@ -1,0 +1,14 @@
+{
+    "NFS_share": [
+        "Name":"",
+        "NFSHost": "nfssvm1atl.adm2.gmsmail.com",
+        "VMGuest1" : {
+            "vmdk_path": "/volume/VM/nfsdumpServerName.vmdk",
+            "is mounted": "No"
+        },
+        "VMGuest2" : {
+            "vmdk_path": "/volume/VM/nfsdumpServerName.vmdk",
+            "is mounted": "No"
+        }
+ ]
+}
