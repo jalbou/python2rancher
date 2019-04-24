@@ -40,7 +40,7 @@ def create(workloadName,count):
     while i < count:
         i += 1
         workload = workloadName+str(i+firstOccurence)
-        print(firstOccurence)
+        #print(firstOccurence)
         isWorkload = rancher.getWorkload(RancherObj,workload)
         isStorageClass = rancher.getStorageClass(RancherObj)
         if isWorkload == 404 or isStorageClass==404:
@@ -53,3 +53,21 @@ def create(workloadName,count):
                 rancher.setNewWorkload(RancherObj,workload)
             else:
                 print("Workload "+workload+" already existing. Escaping...")
+                
+def remove(workloadName):
+    #Get Rancher API cred from system variable enviroments
+    headers = {
+        'Content-Type': "application/json",
+        'Authorization': os.environ.get('RancherAuth'),
+        'cache-control': "no-cache",
+        'Postman-Token': os.environ.get('RancherToken')
+    }
+    RancherObj =  {
+        'rancherEndpoint':os.environ.get('RancherEndpoint'),
+        'rancherClusterID':os.environ.get('RancherClusterID'),
+        'rancherProjectID':os.environ.get('RancherProjectID'),
+        'workloadTemplate':workloadName,
+        'headers': headers
+    }
+       #Set HTTP Header for Rancher API Calls
+    rancher.removeWorkload(RancherObj,workloadName)
