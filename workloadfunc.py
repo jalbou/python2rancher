@@ -43,14 +43,16 @@ def create(workloadName,count):
         #print(firstOccurence)
         isWorkload = rancher.getWorkload(RancherObj,workload)
         isStorageClass = rancher.getStorageClass(RancherObj)
-        if isWorkload == 404 or isStorageClass==404:
+        if isWorkload.status_code == 404 or isStorageClass==404:
             if  isStorageClass == 404:
                 print('Storage Class storageclass'+workloadName+' not found , creating ... ')
                 rancher.setNewStorageClass(RancherObj)
-            if  isWorkload == 404:
+            if  isWorkload.status_code == 404:
                 print('Workload '+workload+' not found , creating ... ')
                 rancher.setNewPVC(RancherObj,workload)
                 rancher.setNewWorkload(RancherObj,workload)
+                newWorkload = rancher.getWorkload(RancherObj,workload)
+                return workloadName+"created, the service is available on "+(str(json.loads(newWorkload.content)))
             else:
                 print("Workload "+workload+" already existing. Escaping...")
                 

@@ -9,5 +9,6 @@ choco install notepadplusplus.install -y
 choco install python3 -y
 [Environment]::SetEnvironmentVariable("RancherAuth","Basic "+$RancherAuth,"user")
 [Environment]::SetEnvironmentVariable("RancherClusterID","c-czlqw","user")
+[Environment]::SetEnvironmentVariable("RancherProjectID",'c-czlqw:p-tfzmg',"user")
 [Environment]::SetEnvironmentVariable("RancherEndpoint","ran01.chamaa.local","user")
 [Environment]::SetEnvironmentVariable("RancherToken",$RancherToken,"user")

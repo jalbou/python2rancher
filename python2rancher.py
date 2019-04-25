@@ -27,6 +27,7 @@ def setNewWorkload(RancherObj,workloadName):
     rawJSON['projectId'] = RancherObj['rancherProjectID']
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST",url, data=payload, headers=RancherObj['headers'],verify=False)
+    return response.content
 #Error Handling here
 
 ## This function is used to create a new Persitant Volume claim on a given storage class
@@ -62,7 +63,7 @@ def getWorkload(RancherObj,workloadName):
     url = 'https://'+RancherObj['rancherEndpoint']+'/v3/project/'+RancherObj['rancherProjectID']+'/workloads/statefulset:default:'+workloadName
     payload = ""
     response = requests.get(url, data=payload, headers=RancherObj['headers'] ,verify=False)
-    return response.status_code
+    return response
 
 ## This function is used to fetch a storage class by his name, return 404 if any ressource was found and 202 if something exist
 def getStorageClass(RancherObj):
