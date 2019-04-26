@@ -2,9 +2,9 @@ from flask import Flask , render_template
 import workloadfunc as workload
 app = Flask(__name__)
 
-@app.route("/create")
-def create():
-    return workload.create('web')
+@app.route("/create/<service>")
+def create(service):
+    return workload.create(service)
 @app.route("/remove")
 def remove():
     workload.remove('minecraft1')
