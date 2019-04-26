@@ -61,9 +61,27 @@ def setNewStorageClass(RancherObj):
 ## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
 def getWorkload(RancherObj,workloadName):
     url = 'https://'+RancherObj['rancherEndpoint']+'/v3/project/'+RancherObj['rancherProjectID']+'/workloads/statefulset:default:'+workloadName
+    print(url)
     payload = ""
     response = requests.get(url, data=payload, headers=RancherObj['headers'] ,verify=False)
-    return response
+    ## Building workload objects containing workload name, fully qualified domain name and a listening port
+    JSONResponse = json.loads(response.content)
+    if response.status_code == 200:
+        listeningPort = str(JSONResponse['publicEndpoints'][0]['port'])
+        workloadFQDN  = str(JSONResponse['publicEndpoints'][0]['addresses'][0])
+        workload = str(JSONResponse['containers'][0]['name'])
+        print("Listening Port : "+listeningPort)
+        print("Workload FQDN : "+workloadFQDN)
+        data = {}
+        data['FQDN'] = workloadFQDN
+        data['workloadName'] = workload
+        data['port'] = listeningPort
+        data['status'] = response.status_code
+        json_data = json.dumps(data)
+        print(json_data)
+        return json_data
+    if response.status_code == 404:
+        return 404
 
 ## This function is used to fetch a storage class by his name, return 404 if any ressource was found and 202 if something exist
 def getStorageClass(RancherObj):

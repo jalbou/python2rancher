@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
+"""Simple fact sample app."""
+
 import random
 import logging
 import requests
-import json
 
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import (
@@ -14,12 +16,42 @@ from ask_sdk_model.ui import SimpleCard
 from ask_sdk_model import Response
 
 
+# =========================================================================================================================================
+# TODO: The items below this comment need your attention.
+# =========================================================================================================================================
+SKILL_NAME = "Space Facts"
+GET_FACT_MESSAGE = "Le serveur "
 HELP_MESSAGE = "You can say tell me a space fact, or, you can say exit... What can I help you with?"
 HELP_REPROMPT = "What can I help you with?"
 STOP_MESSAGE = "Goodbye!"
 FALLBACK_MESSAGE = "The Space Facts skill can't help you with that.  It can help you discover facts about space if you say tell me a space fact. What can I help you with?"
 FALLBACK_REPROMPT = 'What can I help you with?'
 EXCEPTION_MESSAGE = "Sorry. I cannot help you with that."
+
+# =========================================================================================================================================
+# TODO: Replace this data with your own.  You can find translations of this data at http://github.com/alexa/skill-sample-python-fact/lambda/data
+# =========================================================================================================================================
+
+data = [
+  'A year on Mercury is just 88 days long.',
+  'Despite being farther from the Sun, Venus experiences higher temperatures than Mercury.',
+  'Venus rotates counter-clockwise, possibly because of a collision in the past with an asteroid.',
+  'On Mars, the Sun appears about half the size as it does on Earth.',
+  'Earth is the only planet not named after a god.',
+  'Jupiter has the shortest day of all the planets.',
+  'The Milky Way galaxy will collide with the Andromeda Galaxy in about 5 billion years.',
+  'The Sun contains 99.86% of the mass in the Solar System.',
+  'The Sun is an almost perfect sphere.',
+  'A total solar eclipse can happen once every 1 to 2 years. This makes them a rare event.',
+  'Saturn radiates two and a half times more energy into space than it receives from the sun.',
+  'The temperature inside the Sun can reach 15 million degrees Celsius.',
+  'The Moon is moving approximately 3.8 cm away from our planet every year.',
+]
+
+# =========================================================================================================================================
+# Editing anything below this line might break your skill.
+# =========================================================================================================================================
+
 sb = SkillBuilder()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -40,6 +72,9 @@ class CreateNewWorkloadHandler(AbstractRequestHandler):
         response = requests.get(url)
         print(slots["serveur"].value)
         speech = "Le serveur "+slots["serveur"].value+" à été créé"
+        
+        #speech = "Salut"
+
         handler_input.response_builder.speak(speech)
         return handler_input.response_builder.response
 
@@ -55,24 +90,6 @@ class DeleteWorkloadHandler(AbstractRequestHandler):
         url = 'http://webservice.chamaa.ca:5000/remove/'+slots["serveur"].value+str(slots["numero"].value)
         response = requests.get(url)
         speech = "Le serveur "+slots["serveur"].value+str(slots["numero"].value)+" à été effacé"
-        handler_input.response_builder.speak(speech)
-        return handler_input.response_builder.response
-
-class GetWorkloadHandler(AbstractRequestHandler):
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return (is_request_type("LaunchRequest")(handler_input) or
-                is_intent_name("rancherStatusInt")(handler_input))
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        logger.info("Dans : GetWorkloadHandler ")
-        slots = handler_input.request_envelope.request.intent.slots
-        url = 'http://webservice.chamaa.ca:5000/get/'+slots["serveur"].value+str(slots["numero"].value)
-        response = requests.get(url)
-        JSONResponse = json.loads(response.content)
-        listeningPort = str(JSONResponse['publicEndpoints'][0]['port'])
-        workloadFQDN  = str(JSONResponse['publicEndpoints'][0]['addresses'][0])
-        speech = "Le serveur "+slots["serveur"].value+str(slots["numero"].value)+"écoute à l'adresse suivante : "+workloadFQDN+" et sur le port"+listeningPort
         handler_input.response_builder.speak(speech)
         return handler_input.response_builder.response
 
@@ -161,6 +178,7 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
         return handler_input.response_builder.response
 
+
 # Request and Response loggers
 class RequestLogger(AbstractRequestInterceptor):
     """Log the alexa requests."""
@@ -180,7 +198,6 @@ class ResponseLogger(AbstractResponseInterceptor):
 # Register intent handlers
 sb.add_request_handler(CreateNewWorkloadHandler())
 sb.add_request_handler(DeleteWorkloadHandler())
-sb.add_request_handler(GetWorkloadHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
