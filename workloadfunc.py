@@ -68,4 +68,4 @@ def remove(workloadName):
         'headers': headers
     }
        #Set HTTP Header for Rancher API Calls
-    rancher.removeWorkload(RancherObj,workloadName)
+    return rancher.removeWorkload(RancherObj,workloadName)
