@@ -70,8 +70,9 @@ class GetWorkloadHandler(AbstractRequestHandler):
         url = 'http://webservice.chamaa.ca:5000/get/'+slots["serveur"].value+str(slots["numero"].value)
         response = requests.get(url)
         JSONResponse = json.loads(response.content)
-        listeningPort = str(JSONResponse['publicEndpoints'][0]['port'])
-        workloadFQDN  = str(JSONResponse['publicEndpoints'][0]['addresses'][0])
+        #workload = str(JSONResponse['workloadName'])
+        listeningPort = str(JSONResponse['port'])
+        workloadFQDN  = str(JSONResponse['FQDN'])
         speech = "Le serveur "+slots["serveur"].value+str(slots["numero"].value)+"écoute à l'adresse suivante : "+workloadFQDN+" et sur le port"+listeningPort
         handler_input.response_builder.speak(speech)
         return handler_input.response_builder.response

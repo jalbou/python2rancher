@@ -77,7 +77,7 @@ def getWorkload(RancherObj,workloadName):
         data['workloadName'] = workload
         data['port'] = listeningPort
         data['status'] = response.status_code
-        json_data = json.dumps(data)
+        json_data = json.dumps(data,indent=4, sort_keys=True)
         print(json_data)
         return json_data
     if response.status_code == 404:
