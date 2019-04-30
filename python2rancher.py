@@ -27,7 +27,8 @@ def setNewWorkload(RancherObj,workloadName):
     rawJSON['projectId'] = RancherObj['rancherProjectID']
     payload=json.dumps(rawJSON, indent=4, sort_keys=True)
     response = requests.request("POST",url, data=payload, headers=RancherObj['headers'],verify=False)
-    return response.content
+    print(response.status_code)
+    return response.status_code
 #Error Handling here
 
 ## This function is used to create a new Persitant Volume claim on a given storage class

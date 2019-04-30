@@ -8,6 +8,7 @@ import urllib3
 #Custom librarie to manage Minecraft workloads on a given k8s cluster managed by Rancher
 import python2rancher as rancher
 import os
+import time
 import re
 urllib3.disable_warnings()
 
@@ -44,10 +45,14 @@ def create(workloadName):
     workload = workloadName+str(firstOccurence+1)
     rancher.setNewPVC(RancherObj,workload)
     newWorkload = rancher.setNewWorkload(RancherObj,workload)
-    print(workloadName+str(firstOccurence+1))
-    #newWorkload = rancher.getWorkload(RancherObj,workload)
-    return workloadName+str(firstOccurence+1)#+"created, the service is available on "+(str(json.loads(newWorkload.content)))
-
+    if newWorkload in (200,201,202):
+        time.sleep(1)
+        result = rancher.getWorkload(RancherObj,workload)
+        return result
+    else:
+        print("There was an issue during creation of "+workload)
+        return "There was an issue during creation of "+workload
+        
                 
 def remove(workloadName):
     #Get Rancher API cred from system variable enviroments
