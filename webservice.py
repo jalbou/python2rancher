@@ -12,7 +12,7 @@ def remove(name):
 
 @app.route("/get/<name>")
 def get(name):
-    return Response(json.dumps(workload.get(name)), mimetype='application/json')
+    return workload.get(name)
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port='5000',debug=True)
