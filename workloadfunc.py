@@ -53,21 +53,22 @@ def create(workloadName):
         firstOccurence = 0
     else:
         filteredList.sort(reverse=True)
-        if  isStorageClass == 404:
-            print('Storage Class storageclass'+workloadName+' not found , creating ... ')
-            rancher.setNewStorageClass(RancherObj)
         firstOccurence =int(re.findall(r'\d', str(filteredList[0]))[0])
+    if  isStorageClass == 404:
+        print('Storage Class storageclass'+workloadName+' not found , creating ... ')
+        rancher.setNewStorageClass(RancherObj)
     workload = workloadName+str(firstOccurence+1)
     rancher.setNewPVC(RancherObj,workload)
     newWorkload = rancher.setNewWorkload(RancherObj,workload)
     if newWorkload in (200,201,202):
         time.sleep(1)
-        result = rancher.getWorkload(RancherObj,workload)
-        return result
+        newWorkloadInfo = rancher.getWorkload(RancherObj,workload)
+        #nsx.createPool(newWorkloadInfo.port)
+        return newWorkloadInfo
     else:
         print("There was an issue during creation of "+workload)
         return "There was an issue during creation of "+workload
-        
+    
                
 def remove(workloadName):
     #Get Rancher API cred from system variable enviroments
