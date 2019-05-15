@@ -84,6 +84,29 @@ def getWorkload(RancherObj,workloadName):
     if response.status_code == 404:
         return 404
 
+## This function is used to fetch a workload by his name, return 404 if any ressource was found and 202 if something exist
+def getPersistantVolume(RancherObj,volumeName):
+    url = 'https://'+RancherObj['rancherEndpoint']+'/v3/project/'+RancherObj['rancherProjectID']+'/persistentVolumeClaims/default:'+volumeName
+    print(url)
+    payload = ""
+    response = requests.get(url, data=payload, headers=RancherObj['headers'] ,verify=False)
+    ## Building workload objects containing workload name, fully qualified domain name and a listening port
+    if response.status_code == 404:
+        return 404
+    else:
+        print(response.content)
+        JSONResponse = json.loads(response.content)
+        name =str(JSONResponse['name'])
+        storage = str(JSONResponse['resources']['requests']['storage'])
+        print("Storage Volume Name : "+name)
+        print("Space Allocated : "+storage)
+        data = {}
+        data['volumeName'] = name
+        data['space_alloc'] = storage
+        json_data = json.dumps(data)
+        print(json_data)
+        return json_data
+
 ## This function is used to fetch a storage class by his name, return 404 if any ressource was found and 202 if something exist
 def getStorageClass(RancherObj):
     url = 'https://'+RancherObj['rancherEndpoint']+'/v3/cluster/'+RancherObj['rancherClusterID']+'/storageClasses/storageclass'+RancherObj['workloadTemplate']
@@ -125,9 +148,21 @@ def removeWorkload(RancherObj,workloadName):
     else:
         url = 'https://'+RancherObj['rancherEndpoint']+'/v3/project/'+RancherObj['rancherProjectID']+'/workloads/statefulset:default:'+workloadName
         response = requests.delete(url,headers=RancherObj['headers'] ,verify=False)
+        removePersistantVolume(RancherObj,"volume"+workloadName)
         status_code = response.status_code
         return status_code
-    
+
+## This function is used to delete a persistant volume by his name, return 404 if any ressource was found and 204 was deleted
+def removePersistantVolume(RancherObj,volumeName):
+    ifVolumeExist = getPersistantVolume (RancherObj,volumeName)
+    if ifVolumeExist == 404:
+        return "404"
+    else:
+        url = 'https://'+RancherObj['rancherEndpoint']+'/v3/project/'+RancherObj['rancherProjectID']+'/persistentVolumeClaims/default:'+volumeName
+        response = requests.delete(url,headers=RancherObj['headers'] ,verify=False)
+        status_code = response.status_code
+        return status_code
+        
 ## This function is used to delete a storage class by his name, return 404 if any ressource was found and 204 was deleted
 def removeStorageClass(RancherObj):
     isStorageClass = getStorageClass(RancherObj)

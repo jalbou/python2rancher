@@ -7,10 +7,26 @@ import json
 import urllib3
 #Custom librarie to manage Minecraft workloads on a given k8s cluster managed by Rancher
 import python2rancher as rancher
+import python2nsx as nsx
 import os
 import time
 import re
 urllib3.disable_warnings()
+
+####  Added temporary for testing purpose ####
+headers = {
+        'Content-Type': "application/json",
+        'Authorization': os.environ.get('RancherAuth'),
+        'cache-control': "no-cache",
+        'Postman-Token': os.environ.get('RancherToken')
+}
+RancherObj =  {
+        'rancherEndpoint':os.environ.get('RancherEndpoint'),
+        'rancherClusterID':os.environ.get('RancherClusterID'),
+        'rancherProjectID':os.environ.get('RancherProjectID'),
+        'headers': headers
+}
+###############################################
 
 def create(workloadName):
     #Get Rancher API cred from system variable enviroments
@@ -33,7 +49,6 @@ def create(workloadName):
     #Get A list of actual workload matching the template workload requested using a regex filter
     regex = re.compile(RancherObj['workloadTemplate'])
     filteredList = list(filter(regex.match, workloads))
-    
     if not filteredList:
         firstOccurence = 0
     else:
@@ -53,7 +68,7 @@ def create(workloadName):
         print("There was an issue during creation of "+workload)
         return "There was an issue during creation of "+workload
         
-                
+               
 def remove(workloadName):
     #Get Rancher API cred from system variable enviroments
     headers = {
@@ -89,3 +104,5 @@ def get(workloadName):
     }
        #Set HTTP Header for Rancher API Calls
     return rancher.getWorkload(RancherObj,workloadName)
+
+#rancher.getPersistantVolume(RancherObj,"volumeminecraft1")
