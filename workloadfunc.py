@@ -64,6 +64,7 @@ def create(workloadName):
         time.sleep(1)
         newWorkloadInfo = rancher.getWorkload(RancherObj,workload)
         #nsx.createPool(newWorkloadInfo.port)
+        print("port "+newWorkloadInfo['port'])
         return newWorkloadInfo
     else:
         print("There was an issue during creation of "+workload)
