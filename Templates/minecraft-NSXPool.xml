@@ -1,0 +1,27 @@
+<pool>
+        <name>Poool-minecraft1</name>
+        <ipVersionFilter>any</ipVersionFilter>
+        <algorithm>round-robin</algorithm>
+        <transparent>true</transparent>
+        <monitorId>monitor-2</monitorId>
+        <member>
+            <ipAddress>192.168.100.127</ipAddress>
+            <weight>1</weight>
+            <monitorPort>5001</monitorPort>
+            <port>5001</port>
+            <maxConn>0</maxConn>
+            <minConn>0</minConn>
+            <condition>enabled</condition>
+            <name>wkr1</name>
+        </member>
+        <member>
+            <ipAddress>192.168.100.128</ipAddress>
+            <weight>1</weight>
+            <monitorPort>5001</monitorPort>
+            <port>5001</port>
+            <maxConn>0</maxConn>
+            <minConn>0</minConn>
+            <condition>enabled</condition>
+            <name>wkr2</name>
+        </member>
+    </pool>

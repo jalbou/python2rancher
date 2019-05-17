@@ -1,0 +1,17 @@
+        <natRules>
+        <natRule>
+            <loggingEnabled>false</loggingEnabled>
+            <enabled>true</enabled>
+            <description>minecraft3</description>
+            <translatedAddress>192.168.100.254</translatedAddress>
+            <ruleType>user</ruleType>
+            <action>dnat</action>
+            <vnic>2</vnic>
+            <originalAddress>192.168.55.163</originalAddress>
+            <dnatMatchSourceAddress>any</dnatMatchSourceAddress>
+            <protocol>tcp</protocol>
+            <originalPort>30599</originalPort>
+            <translatedPort>30599</translatedPort>
+            <dnatMatchSourcePort>any</dnatMatchSourcePort>
+        </natRule>
+    </natRules>

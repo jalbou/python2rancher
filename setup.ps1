@@ -10,8 +10,8 @@ choco install postman -y
 choco install notepadplusplus.install -y
 choco install python3 -y
 [Environment]::SetEnvironmentVariable("RancherAuth","Basic "+$RancherAuth,"user")
-[Environment]::SetEnvironmentVariable("RancherClusterID","c-nx2zg","user")
-[Environment]::SetEnvironmentVariable("RancherProjectID",'c-nx2zg:p-5qb6d',"user")
+[Environment]::SetEnvironmentVariable("RancherClusterID","c-rt24k","user")
+[Environment]::SetEnvironmentVariable("RancherProjectID",'c-rt24k:p-m8m9c',"user")
 [Environment]::SetEnvironmentVariable("RancherEndpoint","ran01.chamaa.local","user")
 [Environment]::SetEnvironmentVariable("RancherToken",$RancherToken,"user")
 [Environment]::SetEnvironmentVariable("NSXAuth",$NSXAuth,"user")

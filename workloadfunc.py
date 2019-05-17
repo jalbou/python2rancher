@@ -63,8 +63,10 @@ def create(workloadName):
     if newWorkload in (200,201,202):
         time.sleep(1)
         newWorkloadInfo = rancher.getWorkload(RancherObj,workload)
-        #nsx.createPool(newWorkloadInfo.port)
-        print("port "+newWorkloadInfo['port'])
+        newTCPPort = json.loads(newWorkloadInfo)['port']
+        print("New TCP Port "+newTCPPort+" creating NSX loadbalancer ...")
+        nsx.createLoadBalancerPool(newTCPPort,"Pool"+workload)
+        nsx.createNATRule(newTCPPort,"NAT"+workload)
         return newWorkloadInfo
     else:
         print("There was an issue during creation of "+workload)
